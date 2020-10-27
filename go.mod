@@ -20,3 +20,7 @@ require (
 	github.com/rainycape/unidecode v0.0.0-20150907023854-cb7f23ec59be // indirect
 	github.com/ulikunitz/xz v0.5.6 // indirect
 )
+
+replace github.com/terraform-providers/terraform-provider-vault/generated/resources/ad => ./generated/resources/ad
+replace github.com/terraform-providers/terraform-provider-vault/generated/datasources/ad/creds => ./generated/datasources/ad/creds
+replace github.com/terraform-providers/terraform-provider-vault/generated/resources/ad/roles => ./generated/resources/ad/roles

@@ -1,6 +1,6 @@
 # Generating Resources and Data Sources
 
-This code is part of a code generation package. It is intended to speed 
+This code is part of a code generation package. It is intended to speed
 up development while still yielding high quality code.
 
 ## How to Generate Code and Docs
@@ -16,14 +16,14 @@ up development while still yielding high quality code.
 ```
 make generate
 ```
-- If you note any changes, you may need to hand-add code that implements 
+- If you note any changes, you may need to hand-add code that implements
 [best practices](https://www.terraform.io/docs/extend/best-practices/deprecations.html)
 for deprecations.
 - Hand-test the code while comparing it to Vault's API docs until you're satisfied that
 the generated code is correct.
 - Also check against the real Vault API. The OpenAPI doc _does not_ include all response
-parameters, nor do Vault docs, and some response parameters are returned conditionally. 
-So, play with the endpoint and verify you've accounted for all the parameters coming out 
+parameters, nor do Vault docs, and some response parameters are returned conditionally.
+So, play with the endpoint and verify you've accounted for all the parameters coming out
 of it.
 - If you find undocumented response parameters, add them to the endpoint's `additionalInfo`.
 - Hand-write unit tests for the code.
