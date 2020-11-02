@@ -14,6 +14,13 @@ jobs:
       - image: vault:latest
         environment:
           - VAULT_DEV_ROOT_TOKEN_ID=root
+      - image: laslabs/alpine-samba-dc:latest
+        environment:
+          - SAMBA_DC_REALM: "corp.example.net"
+          - SAMBA_DC_DOMAIN: "EXAMPLE"
+          - SAMBA_DC_ADMIN_PASSWD: "SuperSecretPassw0rd"
+          - SAMBA_DC_DNS_BACKEND: "SAMBA_INTERNAL"
+        command: "samba"
     working_directory: /go/src/github.com/terraform-providers/terraform-provider-vault
     steps:
       - checkout
@@ -33,6 +40,13 @@ jobs:
             echo 'export MYSQL_CONNECTION_USERNAME="root"' >> $BASH_ENV
             echo 'export MYSQL_CONNECTION_PASSWORD="mysql"' >> $BASH_ENV
             echo 'export MONGODB_URL="mongodb://root:mongodb@localhost:27017/admin?ssl=false"' >> $BASH_ENV
+            echo 'export AD_BINDDN="CN=Administrator,CN=Users,DC=corp,DC=example,DC=net"' >> $BASH_ENV
+            echo 'export AD_BINDPASS="SuperSecretPassw0rd"' >> $BASH_ENV
+            echo 'export AD_URL="ldaps://ad"' >> $BASH_ENV
+      - run:
+          name: "Load LDAP user"
+          command: |
+            LDAPTLS_REQCERT=never ldapadd -h 127.0.0.1 -Z -p 389 -w "${AD_BINDPASS?}" -D "${AD_BINDDN?}" -f user.ldif
       - run:
           name: "Run Tests"
           command: |

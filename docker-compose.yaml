@@ -1,4 +1,4 @@
-version: "2.2"
+version: "3.7"
 
 services:
   vault:
@@ -32,3 +32,17 @@ services:
       "discovery.type": "single-node"
       "xpack.security.enabled": "true"
       "ELASTIC_PASSWORD": "elastic"
+  ad:
+    image: laslabs/alpine-samba-dc:latest
+    command: samba
+    privileged: true
+    ports:
+    - "389:389"
+    volumes:
+    - ${PWD}/testdata/user.ldif:/etc/ad/user.ldif
+    environment:
+      SAMBA_DC_REALM: "corp.example.net"
+      SAMBA_DC_DOMAIN: "EXAMPLE"
+      SAMBA_DC_ADMIN_PASSWD: "SuperSecretPassw0rd"
+      SAMBA_DC_DNS_BACKEND: "SAMBA_INTERNAL"
+      LDAPTLS_REQCERT: "never"

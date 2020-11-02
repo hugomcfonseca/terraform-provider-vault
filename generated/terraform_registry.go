@@ -24,7 +24,6 @@ var DataSourceRegistry = map[string]*schema.Resource{
 var ResourceRegistry = map[string]*schema.Resource{
 	"vault_ad_secret_backend":        ad.ConfigResource(),
 	"vault_ad_secret_role":           adRoles.RoleResource(),
-	"vault_ad_secret_rotate_root":    ad.RotateRootResource(),
 	"vault_transform_alphabet":       alphabet.NameResource(),
 	"vault_transform_role":           role.NameResource(),
 	"vault_transform_template":       template.NameResource(),

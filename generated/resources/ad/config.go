@@ -342,16 +342,29 @@ func createConfigResource(d *schema.ResourceData, meta interface{}) error {
 
 func readConfigResource(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*api.Client)
-	vaultPath := fmt.Sprintf("%s/config", d.Id())
-	log.Printf("[DEBUG] Reading %q", vaultPath)
 
-	resp, err := client.Logical().Read(vaultPath)
+	path := d.Id()
+	log.Printf("[DEBUG] Reading %q", path)
+
+	mountResp, err := client.Sys().MountConfig(path)
 	if err != nil {
-		return fmt.Errorf("error reading %q: %s", vaultPath, err)
+		return fmt.Errorf("error reading %q: %s", path, err)
 	}
-	log.Printf("[DEBUG] Read %q", vaultPath)
+
+	d.Set("path", path)
+	d.Set("default_lease_ttl_seconds", mountResp.DefaultLeaseTTL)
+	d.Set("max_lease_ttl_seconds", mountResp.MaxLeaseTTL)
+
+	configPath := fmt.Sprintf("%s/config", d.Id())
+	log.Printf("[DEBUG] Reading %q", configPath)
+
+	resp, err := client.Logical().Read(configPath)
+	if err != nil {
+		return fmt.Errorf("error reading %q: %s", configPath, err)
+	}
+	log.Printf("[DEBUG] Read %q", configPath)
 	if resp == nil {
-		log.Printf("[WARN] %q not found, removing from state", vaultPath)
+		log.Printf("[WARN] %q not found, removing from state", configPath)
 		d.SetId("")
 		return nil
 	}
@@ -495,11 +508,34 @@ func readConfigResource(d *schema.ResourceData, meta interface{}) error {
 }
 
 func updateConfigResource(d *schema.ResourceData, meta interface{}) error {
+	path := d.Id()
+
 	client := meta.(*api.Client)
-	vaultPath := fmt.Sprintf("%s/config", d.Id())
+	defaultTTL := d.Get("default_lease_ttl_seconds").(int)
+	maxTTL := d.Get("max_lease_ttl_seconds").(int)
+	tune := api.MountConfigInput{}
+	data := map[string]interface{}{}
+
+	if defaultTTL != 0 {
+		tune.DefaultLeaseTTL = fmt.Sprintf("%ds", defaultTTL)
+		data["default_lease_ttl_seconds"] = defaultTTL
+	}
+
+	if maxTTL != 0 {
+		tune.MaxLeaseTTL = fmt.Sprintf("%ds", maxTTL)
+		data["max_lease_ttl_seconds"] = maxTTL
+	}
+
+	if tune.DefaultLeaseTTL != "0" || tune.MaxLeaseTTL != "0" {
+		err := client.Sys().TuneMount(path, tune)
+		if err != nil {
+			return fmt.Errorf("error mounting to %q: %s", path, err)
+		}
+	}
+
+	vaultPath := fmt.Sprintf("%s/config", path)
 	log.Printf("[DEBUG] Updating %q", vaultPath)
 
-	data := map[string]interface{}{}
 	if raw, ok := d.GetOk("anonymous_group_search"); ok {
 		data["anonymous_group_search"] = raw
 	}

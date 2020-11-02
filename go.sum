@@ -294,6 +294,7 @@ github.com/hashicorp/terraform-config-inspect v0.0.0-20191115094559-17f92b0546e8
 github.com/hashicorp/terraform-config-inspect v0.0.0-20191115094559-17f92b0546e8/go.mod h1:p+ivJws3dpqbp1iP84+npOyAmTTOLMgCzrXd3GSdn/A=
 github.com/hashicorp/terraform-plugin-sdk v1.4.1 h1:REgN6WbySD6aIYdF6Uob3ic4eQkfh4NXSWU/casmgb4=
 github.com/hashicorp/terraform-plugin-sdk v1.4.1/go.mod h1:H5QLx/uhwfxBZ59Bc5SqT19M4i+fYt7LZjHTpbLZiAg=
+github.com/hashicorp/terraform-plugin-sdk v1.16.0 h1:NrkXMRjHErUPPTHQkZ6JIn6bByiJzGnlJzH1rVdNEuE=
 github.com/hashicorp/terraform-svchost v0.0.0-20191011084731-65d371908596 h1:hjyO2JsNZUKT1ym+FAdlBEkGPevazYsmVgIMw7dVELg=
 github.com/hashicorp/terraform-svchost v0.0.0-20191011084731-65d371908596/go.mod h1:kNDNcF7sN4DocDLBkQYz73HGKwN1ANB1blq4lIYLYvg=
 github.com/hashicorp/vault v1.2.0 h1:Daa0PtdqucVNuQ9KbvOk0XjbsGvPoFKv9X9fdKHQTrk=
