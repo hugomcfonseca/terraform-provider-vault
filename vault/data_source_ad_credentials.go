@@ -1,7 +1,4 @@
-package creds
-
-// DO NOT EDIT
-// This code is generated.
+package vault
 
 import (
 	"fmt"
@@ -10,7 +7,7 @@ import (
 	"log"
 )
 
-func CredsDataSource() *schema.Resource {
+func adAccessCredentialsDataSource() *schema.Resource {
 	return &schema.Resource{
 		Read: readCredsResource,
 		Schema: map[string]*schema.Schema{

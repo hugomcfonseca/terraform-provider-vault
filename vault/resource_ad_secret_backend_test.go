@@ -1,4 +1,4 @@
-package ad
+package vault
 
 import (
 	"fmt"
@@ -9,26 +9,15 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
 	"github.com/hashicorp/vault/api"
-	"github.com/terraform-providers/terraform-provider-vault/schema"
 	"github.com/terraform-providers/terraform-provider-vault/util"
-	"github.com/terraform-providers/terraform-provider-vault/vault"
 )
-
-var configTestProvider = func() *schema.Provider {
-	p := schema.NewProvider(vault.Provider())
-	p.RegisterResource("vault_mount", vault.MountResource())
-	p.RegisterResource("vault_ad_secret_backend", ConfigResource())
-	return p
-}()
 
 func TestADSecretBackend(t *testing.T) {
 	path := acctest.RandomWithPrefix("tf-test-ad")
 	bindDN, bindPass, url := util.GetTestADCreds(t)
 
 	resource.Test(t, resource.TestCase{
-		Providers: map[string]terraform.ResourceProvider{
-			"vault": configTestProvider.ResourceProvider(),
-		},
+		Providers:                 testProviders,
 		PreCheck:                  func() { util.TestAccPreCheck(t) },
 		PreventPostDestroyRefresh: true,
 		CheckDestroy:              testAccADSecretBackendCheckDestroy,
@@ -66,7 +55,7 @@ func TestADSecretBackend(t *testing.T) {
 }
 
 func testAccADSecretBackendCheckDestroy(s *terraform.State) error {
-	client := configTestProvider.SchemaProvider().Meta().(*api.Client)
+	client := testProvider.Meta().(*api.Client)
 
 	mounts, err := client.Sys().ListMounts()
 	if err != nil {

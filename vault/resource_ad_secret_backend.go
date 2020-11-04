@@ -1,7 +1,4 @@
-package ad
-
-// DO NOT EDIT
-// This code is generated.
+package vault
 
 import (
 	"fmt"
@@ -12,7 +9,7 @@ import (
 	"github.com/hashicorp/vault/api"
 )
 
-func ConfigResource() *schema.Resource {
+func adSecretBackendResource() *schema.Resource {
 	fields := map[string]*schema.Schema{
 		"path": {
 			Type:        schema.TypeString,

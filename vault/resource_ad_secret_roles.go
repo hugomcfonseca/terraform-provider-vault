@@ -1,7 +1,4 @@
-package roles
-
-// DO NOT EDIT
-// This code is generated.
+package vault
 
 import (
 	"fmt"
@@ -13,7 +10,7 @@ import (
 	"github.com/terraform-providers/terraform-provider-vault/util"
 )
 
-func RoleResource() *schema.Resource {
+func adSecretBackendRoleResource() *schema.Resource {
 	fields := map[string]*schema.Schema{
 		"path": {
 			Type:        schema.TypeString,
@@ -134,6 +131,7 @@ func updateRoleResource(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*api.Client)
 	rolePath := d.Id()
 	log.Printf("[DEBUG] Updating %q", rolePath)
+	fmt.Println("update")
 
 	data := map[string]interface{}{}
 	if raw, ok := d.GetOk("service_account_name"); ok {
